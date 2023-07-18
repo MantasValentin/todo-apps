@@ -1,0 +1,59 @@
+services:
+  frontend:
+    build:
+      context: frontend
+      target: development
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - react-express
+    depends_on:
+      - backend
+
+  backend:
+    restart: always
+    build:
+      context: backend
+      target: development
+    ports:
+      - 80:80
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+      - ./mysql_password.txt:/run/secrets/mysql_password
+    depends_on:
+      - mysql
+    networks:
+      - express-mysql
+      - react-express
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      MYSQL_DB: todos
+
+  mysql:
+    restart: always
+    image: mysql:8.0.33
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+      - ./mysql_password.txt:/run/secrets/mysql_password
+    networks:
+      - express-mysql
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_password
+      MYSQL_DATABASE: todos
+
+networks:
+  react-express:
+  express-mysql:
+
+volumes:
+  todo-mysql-data:

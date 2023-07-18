@@ -1,0 +1,59 @@
+services:
+  frontend:
+    build:
+      context: frontend
+      target: development
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - react-express
+    depends_on:
+      - backend
+
+  backend:
+    restart: always
+    build:
+      context: backend
+      target: development
+    ports:
+      - 80:80
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - express-postgres
+      - react-express
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: todos
+
+  postgres:
+    restart: always
+    image: postgres
+    volumes:
+      - todo-postgres-data:/var/lib/postgresql/data
+    networks:
+      - express-postgres
+    expose:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: postgres
+      POSTGRES_DB: todos
+      
+
+networks:
+  react-express:
+  express-postgres:
+
+volumes:
+  todo-postgres-data:
