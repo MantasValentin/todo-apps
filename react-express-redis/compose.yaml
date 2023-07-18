@@ -33,13 +33,11 @@ services:
 
   redis:
     restart: always
-    image: redis/redis-stack
+    image: redis
     volumes:
       - todo-redis-data:/data
     networks:
       - express-redis
-    ports:
-      - 8001:8001 # web gui for interacting with the database and testing, its pretty good
     expose:
       - 6379
 
