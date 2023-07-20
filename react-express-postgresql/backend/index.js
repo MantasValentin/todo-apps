@@ -71,7 +71,6 @@ async function retryConnection() {
             "CREATE TABLE IF NOT EXISTS todos (id INT PRIMARY KEY, todo VARCHAR(255) NOT NULL)"
           );
           client.release();
-          connection = true;
           console.log("Table setup completed successfully!");
         } catch (error) {
           console.error("Error setting up table:", error);

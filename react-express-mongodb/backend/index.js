@@ -24,14 +24,14 @@ const options = {
 };
 
 // creating a connection to mongodb
-async function connectMongoose() {
+const connectMongoose = async () => {
   try {
     await mongoose.connect(uri, options);
     console.log("Connected to Mongoose");
   } catch (error) {
     console.log("Failed connection to Mongoose", error);
   }
-}
+};
 
 connectMongoose();
 
