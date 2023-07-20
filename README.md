@@ -9,7 +9,7 @@ Need to [install Docker Desktop](https://www.docker.com/products/docker-desktop/
 
 ## Getting Started
 
-Run this command in the terminal at the one of the projects locations and open http://localhost:3000/
+Run this command in the terminal at the one of the projects directories and open http://localhost:3000/
 ```bash
 docker compose up -d
 ```
