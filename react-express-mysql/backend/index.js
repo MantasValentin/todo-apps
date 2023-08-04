@@ -4,14 +4,21 @@ const app = express();
 const fs = require("fs");
 const mysql = require("mysql2");
 
-// accepts connections only from a specific ip (localhost or 127.0.0.1) and port (3000)
+// CORS configuration for specified origin
+const allowedOrigins = ["http://localhost:3000"];
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true); // allow the request if it's in the allowedOrigins array or if origin is not present (local requests)
+      } else {
+        callback(new Error("Unauthorized: Origin not allowed")); // deny the request for other origins
+      }
+    },
   })
 );
-app.use(cors());
+
 // converts data being sent to the server allowing access to it by using req.body
 app.use(express.json());
 
